@@ -18,6 +18,14 @@ https://beej.us/guide/bgnet/html/split/what-is-a-socket.html#what-is-a-socket
 ## practice
 so how do we create a socket in Zig? https://ziglang.org/documentation/master/std/#std.os.linux
 
+also some help from this vlog because kind of not good zig docs: https://blog.reilly.dev/creating-udp-server-from-scratch-in-zig
+
 in this case only for linux, we use the standar library, os.linux, where the sockets are.
 
 *socket*: (domain: ip address family, socket_type: stream or datagram, protocol: when we support multiple protocol)
+
+domain: for domain we have the types, AF.INET and AF.INET6
+socket_type: SOCK.DGRAM, there is not a quick one, but it uses the UDP datagram so i am guessing it is right
+
+
+Note: i just learn of ossification, so fck UDP and TCP, i am doing QUIC

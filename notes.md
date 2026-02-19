@@ -29,3 +29,34 @@ socket_type: SOCK.DGRAM, there is not a quick one, but it uses the UDP datagram 
 
 
 Note: i just learn of ossification, so fck UDP and TCP, i am doing QUIC
+
+# IP and Other concepts
+## Theory 
+
+- Ipv4 and IPv6
+
+There are 2^32 possible Ipv4, to few, so there are 2^128 possible Ipv4 much better
+
+     - loop back address ::1 == 127.0.0.1
+     - IPv6 with many 0 can be compressed
+       2001:0db8:ab00:0000:0000:0000:0000:0000
+       2001:db8:ab00::
+     - IPv4-compatibility you use the notation 
+       ::ffff:192.0.2.33
+
+- Subnet
+
+A subnet is made of a base IP(network) and a subnet mask(hosts)
+
+the subnet mask is a bunch of 1...10...0, they can be written as decimal, or the number of #1 (n) that identifies the net /n. So they look like:
+
+    - 255.255.255.0 = /24
+    - 255.255.255.128 = /25
+
+So if you got 192.168.1.0/24, that tells you 24 bits identify the net, and you can use 8 bits for the hosts.
+
+And for IPv6 you got the 128 bits to play with
+
+
+
+

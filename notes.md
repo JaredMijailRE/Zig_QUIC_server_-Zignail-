@@ -31,7 +31,7 @@ socket_type: SOCK.DGRAM, there is not a quick one, but it uses the UDP datagram 
 Note: i just learn of ossification, so fck UDP and TCP, i am doing QUIC
 
 # IP and Other concepts
-## Theory 
+https://beej.us/guide/bgnet/html/split/ip-addresses-structs-and-data-munging.html 
 
 - Ipv4 and IPv6
 
@@ -57,6 +57,43 @@ So if you got 192.168.1.0/24, that tells you 24 bits identify the net, and you c
 
 And for IPv6 you got the 128 bits to play with
 
+    - *Port Numbers*: There are other addresses, different to the IP, use by UDP and TCP, the port number a *16-bit number* 
+      different services in the internet have different port numbers, they could use any but are associated with one
+      is like other division in top of the ip address of your host
 
 
+- Byte order
 
+Sane people use Big-Endian, which is ther normal order to read an hex number, b34f is b3 4f, but there is also Little-Endian, by intel, b34f is 4f b3.
+The important thing is Big-Endian is also *Network Byte Order* so before sending something in the net you must check the order is right or CAST it.
+
+- NAT
+
+Usually networks have a NAT, a firewall that hides the network for the rest of the world, translates internal IP to external, Network Address Translation, so usually yout network only has one ip address
+for how it works, if you send something it changes the ip you send, for your public ip, and also changes the port, so when something comes back for you it can lock up a table (where the keys are ip and port) to translate again the original ip and port
+
+# System Calls or Bust
+
+https://beej.us/guide/bgnet/html/split/system-calls-or-bust.html
+
+This is more of a practical chapter, so i will identify the concepts and then search for theme in Zig, the syscalls needed should be the same so it is espected to be almost equivalent
+
+- getaddrinfo(): a function that given an (IP or domain, service or port number, addrinfo struct relevant information about host addr (a socket address), gives you back the informatin neeeded to establish a connection (a socket address))
+
+- socket(): get the file descriptor, in C got the same arguments as Zig
+
+- bind(): you must associate the socket with a port(this transalates to an socket address, addrinfo strucut) in your local machine, to listen() for  incomming connection in an specific port
+          The port number is used by the kernel to match an incoming packet to a certain process's socket descriptor, if you are a client, this is not needed
+
+now again the struct addrinfo, is the same as a socket address, and that is the information neccesary to stablish a connection or others stablish connections to you
+
+- connect(): (sockfd: socket file descriptor of host, serv_addr: strucut sockaddr contains the destination port and IP Address, addrlen: lenght in bytes server address structure)
+    the sockaddr, is part of the struct addrinfo
+    if you dont bind the socket, the kernel will bind it for you in some port
+
+- listen(): (sockfd: socket file descriptor, backlog: number of connections allowed on incoming queue), incoming connection wait in a queue until they are accepted
+          For this function you need to bind otherwhise you don't know the port where you will recive connections
+
+- accept(): when you accept a connection from the queue, you will get another socket file descriptor, ready to send() and recv(), the original one will be still listening
+          (sockfd: the listening socket descriptor,struct sockaddr: information of who you want to accept, socklen_t: lenght of sockaddr)
+          

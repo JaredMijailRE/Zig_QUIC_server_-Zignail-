@@ -96,4 +96,56 @@ now again the struct addrinfo, is the same as a socket address, and that is the 
 
 - accept(): when you accept a connection from the queue, you will get another socket file descriptor, ready to send() and recv(), the original one will be still listening
           (sockfd: the listening socket descriptor,struct sockaddr: information of who you want to accept, socklen_t: lenght of sockaddr)
-          
+         
+## send and revc, connected stream or datagram sockets
+
+- send():(
+        sockfd: the socket descriptor you want to send data, the one you got with accept or the one return by socket
+        *msg: a pointer to the data you want to send,
+        len: lenght data in bytes,
+        flags: 0, no more explanation
+        )
+
+- recv():(
+        sockfd: socket descriptor you want to read from, 
+        buf: buffer to read the information into,
+        len: maximium lenght of buffer,
+        flags: 0
+) returns the number of bytes read into the buffer or -1 error, 0 remote closed connection
+
+## sendto and recvfrom, unconnected datagram sockets
+
+We are not connected so we need to give the destination address
+- sendto():(
+        sockfd:
+        *msg:
+        len
+        flags
+        sockaddr *to: contains the destination IP address and port sockaddr_storage
+        socklen_t tolen: len sockaddr_storage        
+)
+
+- recvfrom():(
+        sockfd
+        *buf
+        len
+        flags
+        sockaddr *from
+        *fromlen
+)
+
+## disconnect
+
+- close(): (sockfd), prevents any reads and wirtes to the socket
+- shutdown(): (sockfd,int how): it gives more control of how the socket closes, there are 3 modes
+      0 further receives are disallowed
+      1 further sends are disallowed
+      2 further sends and receives are disallowed: close()
+
+shutdown does not close the file descriptor, close does
+
+## who
+
+- getpeername(sockfd, sockaddr, addrlen)
+- gethostname(*hostname, size)
+
